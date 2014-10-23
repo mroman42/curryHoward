@@ -1,0 +1,477 @@
+%%%
+% Apuntes para un seminario sobre el isomorfismo Curry-Howard
+% Author: Mario Román
+%
+% License:
+%  CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%%%
+
+%%%
+% Este archivo parte de una modificación de una plantilla de Latex para adaptarla al castellano.
+% Su autor original es Frits Wenneker (http://www.howtotex.com).
+%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt, spanish]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage{listings}
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{dkgreen}{rgb}{0,0.35,0}
+\definecolor{dkviolet}{rgb}{0.3,0,0.5}
+\definecolor{dkred}{rgb}{0.5,0,0}
+\definecolor{dkblue}{rgb}{0, 0, 0.9}
+\definecolor{ltblue}{rgb}{0.38, 0.55, 0.8}
+\usepackage{lstcoq}
+\usepackage{catchfilebetweentags}
+\usepackage{verbatim}
+\usepackage{bussproofs}
+
+\usepackage[hidelinks]{hyperref}
+
+\newenvironment{coq_example}{\begin{coq}}{\end{coq}}
+
+% Tildes
+\lstset{
+     literate=%
+         {á}{{\'a}}1
+         {í}{{\'i}}1
+         {é}{{\'e}}1
+         {ý}{{\'y}}1
+         {ú}{{\'u}}1
+         {ó}{{\'o}}1
+         {ě}{{\v{e}}}1
+         {š}{{\v{s}}}1
+         {č}{{\v{c}}}1
+         {ř}{{\v{r}}}1
+         {ž}{{\v{z}}}1
+         {ď}{{\v{d}}}1
+         {ť}{{\v{t}}}1
+         {ň}{{\v{n}}}1                
+         {ů}{{\r{u}}}1
+         {Á}{{\'A}}1
+         {Í}{{\'I}}1
+         {É}{{\'E}}1
+         {Ý}{{\'Y}}1
+         {Ú}{{\'U}}1
+         {Ó}{{\'O}}1
+         {Ě}{{\v{E}}}1
+         {Š}{{\v{S}}}1
+         {Č}{{\v{C}}}1
+         {Ř}{{\v{R}}}1
+         {Ž}{{\v{Z}}}1
+         {Ď}{{\v{D}}}1
+         {Ť}{{\v{T}}}1
+         {Ň}{{\v{N}}}1                
+         {Ů}{{\r{U}}}1    
+}
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{tabularx}
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{
+\normalfont \normalsize
+\textsc{Universidad de Granada} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Curry-Howard \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Mario Román} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+
+
+\definecolor{lgray}{rgb}{0.6,0.6,0.6}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+% Escribir una ecuación:
+%  \begin{align}
+%  \begin{split}
+%----------------------------------------------------------------------------------------
+
+\lstset{frame=tb,
+  language=Haskell,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{lgray},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=3
+}
+
+\maketitle
+  El objetivo de estos apuntes es poner de manifiesto el isomorfismo de Curry-Howard y presentar con él
+  el asesor de demostraciones Coq. Al lector sólo se le requiere un conocimiento
+  superficial de programación funcional.
+
+  \section*{Preludio: Conjuntos y proposiciones}
+    Las proposiciones son conjuntos, y los conjuntos son proposiciones. Este isomorfismo
+    es trivial para el que estudia matemáticas, pero es potente porque expresa que esas
+    dos estructuras son esencialmente, la misma cosa.
+    \begin{align*}
+     x \in A && P x \\
+     x \in A^c && \neg P x \\
+     x \in A \cup B && (P x) \vee (Q x) \\
+     x \in A \cap B && (P x) \wedge (Q x) \\
+     A \subset B && P \Rightarrow Q
+    \end{align*}
+    De hecho puede construirse el isomorfismo como:
+    \begin{alignat*}{4}
+    f :\;& \mathtt{Prop} \;& \rightarrow \;& \mathtt{Set}        \\
+	\;& P x           \;& \mapsto     \;&  \left\{\; x \;|\; P x\; \right\}      
+    \end{alignat*}
+    \begin{alignat*}{4}
+    f^{-1} :\;& \mathtt{Set} \;&  \rightarrow  \;& \mathtt{Prop} \\
+	    \;& A            \;&   \mapsto    \;& (Px \Leftrightarrow x \in A)
+    \end{alignat*}
+
+    Lo realmente interesante del isomorfismo es que preserva las propiedades profundas entre
+    los dos objetos. Planteamos la paradoja de Russel en uno de los dos lados y obtenemos
+    la paradoja de Quine en el otro.
+    \begin{table}[htbp]
+      \centering
+      \begin{tabularx}{\textwidth}{X|X}
+      \textbf{Paradoja de Russell} & \textbf{Paradoja de Quine} \\
+      \hline
+      El conjunto de los conjuntos que no se contienen a sí 
+      mismos no se contiene a sí mismo. &
+      Es falso precedido de sí mismo es falso precedido de sí mismo. \\
+	\centerline{$m = \{x | x \notin x\}$} &
+	\centerline{$M x \equiv \neg x x$} \\  
+	\centerline{$m \in m \quad(?)$} &
+	\centerline{$M M \quad(?)$} \\ 
+      \end{tabularx}
+    \end{table}
+    Esta correspondencia puede parecer trivial, pero permite intercambiar las dos
+    formas de escribir esa misma idea.
+    
+    
+  \section{El isomorfismo Curry-Howard}
+    %% Una presentación correcta de estos apuntes se cuidará de no enunciar el teorema 
+    %% hasta que no sea completamente obvio para la audiencia.
+    \begin{center}
+      \textit{ Los tipos son teoremas, los programas son demostraciones.}
+    \end{center}
+    
+    En Haskell es fácil encontrar, para tipos \textit{arbitrarios}, funciones que tengan la forma
+    general:
+    \begin{lstlisting}
+  a -> (b -> a)
+  (a,b) -> a
+  a -> (a -> b) -> b
+    \end{lstlisting}
+    Mientras que es imposible  encontrar funciones de tipos como:
+    \begin{lstlisting}
+  a -> (a -> b)
+  a -> b
+  b -> (b,c)
+    \end{lstlisting}
+    En este contexto es natural preguntarse qué tipos están poblados (existen elementos de
+    ese tipo) y cuales no. \footnote{Realmente no es exactamente imposible poblar un tipo cualquiera: Haskell permite salirse un poco
+    del isomorfismo usando funciones recursivas que no terminan o usando la constante \texttt{undefined}.
+    Pero no consideraremos esos casos límites.} La respuesta a esta pregunta la da el isomorfismo de Curry-Howard:
+    \begin{center}
+     \textit{Existe un objeto del tipo T si y sólo si T, interpretado como proposición lógica,
+      es cierto.}
+    \end{center}
+    
+    
+    %% Hay un problemilla viendo Curry-Howard en Haskell.
+    %% Por un lado, podemos tener funciones recursivas que hacen cosas raras: fix f = f fix f
+    %% Y por otro lado, podemos tener el problema de que no hay forma elegante de definir False.
+    \subsection{Implicatio}
+      Comprobamos que si tomamos el operador \texttt{->} como la implicación lógica, obtenemos
+      resultados coherentes:
+      \begin{lstlisting}
+  -- Tautología
+  idem :: a -> a
+  idem x = x
+
+  -- Podemos aplicar el modus ponens
+  modusPonens :: a -> (a -> b) -> b 
+  modusPonens x f = f x
+
+  -- Pero no podemos encontrar funciones de este tipo
+  nop :: a -> (a -> b)
+  nop x = ??
+      \end{lstlisting}
+      La belleza del isomorfismo queda patente al probar que el modus ponens no es ni más ni 
+      menos que la aplicación de funciones.
+      
+      
+    %% ¡El producto categórico era precisamente este en Hask y Prop!  
+    \subsection{Conjunctio}
+      Y comprobemos ahora que la conjunción lógica se corresponde con el par de tipos \texttt{(\_,\_)}.
+      \begin{lstlisting}
+  -- Introducción de conjunción
+  conjIntro :: a -> b -> (a,b) 
+  conjIntro x y = (x,y)
+
+  -- Eliminación de conjunción
+  fst :: (a,b) -> a
+  snd :: (a,b) -> b
+      \end{lstlisting}
+      De hecho, el tipo \texttt{(a,b)} está poblado si y sólo si lo están \texttt{a} y \texttt{b}.
+      
+    \subsection{Disiunctio}
+      Necesitamos un tipo que esté poblado si lo está \texttt{a} o lo está \texttt{b}.
+      Es claro observar que el tipo \texttt{Either a b} cumple lo pedido.
+      \begin{lstlisting}
+  -- Introducción de la disyunción
+  disjIntro :: a -> Either a b
+  disjIntro x = Left x
+
+  -- Análisis por casos
+  either :: (a -> c) -> (b -> c) -> Either a b -> c 
+      \end{lstlisting}
+
+    \subsection{Falsum et Verum}
+      Nos quedan por definir las proposiciones \textit{Falso} y \textit{Verdadero} y la
+      negación de proposiciones. Aquí llegamos al punto en el que el Haskell no sirve exactamente
+      para nuestro propósito. En Haskell no se puede definir la función vacía, que sería necesaria
+      para la negación. \footnote{Realemente hay una forma bastante lógica de seguir con estas
+      definiciones. Pero no es la que luego usaremos en Coq: 
+      \url{http://www.haskell.org/haskellwiki/Curry-Howard-Lambek_correspondence}}
+      
+      \textit{Falso} será un tipo sin constructores, y por tanto, no habitado. De él obtenemos
+      la negación y \texttt{Verdadero} mediante implicaciones:
+      \begin{lstlisting}
+  -- Falso
+  data Falsum
+
+  -- La función vacía permite llegar a cualquier tipo
+  -- pero la sintaxis de Haskell no permite definirla
+  exFalsoQuodlibet :: Falsum -> a
+
+  -- Negar algo es afirmar que implica falsedad
+  type Not a = a -> Falsum
+
+  -- Y el tipo Verdadero es, trivialmente
+  type Verum = Falsum -> Falsum
+      \end{lstlisting}
+      Nótese que aquí estamos usando las reglas lógicas:
+      \begin{align*}
+        \forall A&:& (A \Rightarrow False) &=& (\neg A \vee False) &=& \neg A \\
+        \forall A&:& False \Rightarrow False &=& (\neg False \vee False) &=& True
+      \end{align*}
+      
+    \subsection{El isomorfismo en Haskell}
+      Los tipos ya definidos y habitados en Haskell (\texttt{Int, Bool, String}) no serían más que axiomas definidos
+      previamente.
+    
+      %% Isomorfismo completo en Haskell
+      %% Tipos Axiomáticos
+      
+    
+  \section{Deducción natural}
+    En 1935, Gerhard Genzen publicó dos nuevas formulaciones de la lógica, siendo
+    una de ellas la \textbf{deducción natural}. Junto a ellas estableció un método
+    de simplificación de demostraciones, que servía para asegurarse que la demostración
+    no daba vueltas innecesarias.
+    
+    Para asegurarse de esto, estableció que en la demostración normalizada de una
+    fórmula sólo podían aparecer sus subfórmulas. Por ejemplo, para demostrar $A \wedge B$,
+    sólo podían usarse $A$, $B$ y sus subexpresiones, nunca algo como $A \vee B$.
+    Este método asegura además la consistencia. No existe forma de demostrar $\bot$,
+    la proposición contradicción (False).
+  
+    \subsection{Lógica intuicionista}
+      La lógica intuicionista se diferencia de la lógica clásica en que usa una noción
+      constructivista de verdad. En particular, el enunciado $A \vee B$ sólo puede ser
+      demostrado si se construye alguna prueba de $A$ o de $B$. En consecuencia, la
+      ley del tercio excluso $A \vee \neg A$, no puede demostrarse. Aun así,
+      puede introducirse como axioma.
+      
+      La lógica intuicionista es perfecta para ilustrar el isomorfismo, porque
+      se corresponde con el cálculo lambda tipado.\\
+      
+      \begin{table}[ht]
+      \begin{tabular}{p{6cm}p{6cm}}
+	\begin{prooftree}
+	  \AxiomC{A}
+	  \AxiomC{B}
+	  \RightLabel{($\&$-I)}
+	  \BinaryInfC{A \& B}
+	\end{prooftree} & 
+	\begin{prooftree}
+	  \AxiomC{A::M}
+	  \AxiomC{B::N}
+	  \RightLabel{($\times$-I)}
+	  \BinaryInfC{A$\times$B::(M,N)}
+	\end{prooftree} \\
+	
+	\begin{prooftree}
+	  \AxiomC{A \& B}
+	  \RightLabel{($\&$-$E_1$)}
+	  \UnaryInfC{A}
+	\end{prooftree} & 
+	\begin{prooftree}
+	  \AxiomC{A$\times$B::(M,N)}
+	  \RightLabel{($\pi_1$)}
+	  \UnaryInfC{A::M}
+	\end{prooftree} \\
+	
+	\begin{prooftree}
+	  \AxiomC{A \& B}
+	  \RightLabel{($\&$-$E_2$)}
+	  \UnaryInfC{B}
+	\end{prooftree} & 
+	\begin{prooftree}
+	  \AxiomC{A$\times$B::(M,N)}
+	  \RightLabel{($\pi_2$)}
+	  \UnaryInfC{B::N}
+	\end{prooftree} \\
+	
+	\begin{prooftree}
+	  \AxiomC{A $\rightarrow$ B}
+	  \AxiomC{A}
+	  \RightLabel{($\rightarrow$-$E$)}
+	  \BinaryInfC{B}
+	\end{prooftree} & 
+	\begin{prooftree}
+	  \AxiomC{A$\rightarrow$B::$\lambda M.N$}
+	  \AxiomC{A::M}
+	  \RightLabel{($\rightarrow$-$E$)}
+	  \BinaryInfC{B::N}
+	\end{prooftree} \\
+	
+	\begin{prooftree}
+	  \alwaysNoLine
+	  \AxiomC{$[$A$]^x$}
+	  \UnaryInfC{$\vdots$}
+	  \UnaryInfC{B}
+	  \alwaysSingleLine
+	  \RightLabel{($\rightarrow$-$I^x$)}
+	  \UnaryInfC{A$\rightarrow$B}
+	\end{prooftree} & 
+	\begin{prooftree}
+	  \alwaysNoLine
+	  \AxiomC{$[$A::M$]^x$}
+	  \UnaryInfC{$\vdots$}
+	  \UnaryInfC{B::N}
+	  \alwaysSingleLine
+	  \RightLabel{($\rightarrow$-$I^x$)}
+	  \UnaryInfC{A$\rightarrow$B :: $\lambda M.N$}
+	\end{prooftree}
+      \end{tabular}
+      \end{table}
+  
+      El isomorfismo va más allá de las reglas formales. La evaluación de
+      programas en el cálculo lambda se corresponde directamente con la simplificación
+      y normalización de pruebas que usa el cálculo natural.
+  
+  \section{Introducción a Coq}
+    \subsection{Instalación}
+      Los paquetes a instalar para usar el asistente de demostraciones Coq y
+      el IDE oficial que permite escribir interactivamente las demostraciones son:
+      \begin{lstlisting}
+      sudo apt-get install coq coqide coq-theories
+      \end{lstlisting}
+      Una alternativa más potente y recomendada a CoqIde es ProofGeneral, que funciona 
+      como plugin para Emacs.
+      
+      En ambos puede avanzarse línea a línea sobre las definiciones y demostraciones
+      (cada línea en Coq termina en un punto), usando \texttt{C-c C-n} en Emacs y usando
+      el comando de avance en CoqIde.
+      
+%     \subsection{Definición de un tipo}
+%       En Coq, los tipos habituales no son nativos (\texttt{int, string, bool}).
+%       En lugar de ello, el lenguaje ofrece la capacidad de definir todos estos tipos
+%       de datos al usuario y los incluye en librerías.
+%       
+%       Los tipos se definen por enumeración de sus constructores, que pueden ser
+%       parametrizados o no.
+      
+      %\lstinputlisting[language=Coq]{code.v}
+  
+  %\section{Lógica en Coq}
+  %  \subsection{Lógica constructivista}
+  
+  \vfill
+  \begin{thebibliography}{9}
+
+  \bibitem{softwareFund}
+    Benjamin Pierce et al.,
+    \emph{Software Foundations}.
+    University of Pennsylvania,
+    2014 (Version 3.1).
+
+  \bibitem{walder}
+    Philip Walder,
+    \emph{Propositions as Types}.
+    University of Edimburg,
+    
+    
+  \bibitem{lectures}
+    Morten Heine B. Sørensen, Paweł Urzyczyn,
+    \emph{Lectures on the Curry-Howard isomorphism}.
+    
+    
+  \end{thebibliography}
+
+\end{document}
