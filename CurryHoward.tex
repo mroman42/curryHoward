@@ -32,8 +32,13 @@
 %----------------------------------------------------------------------------------------
 
 \documentclass[paper=a4, fontsize=11pt, spanish]{scrartcl} % A4 paper and 11pt font size
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
 
-\usepackage{listings}
+%\usepackage{listings}
+\usepackage{listingsutf8}
+
 \usepackage[usenames,dvipsnames]{xcolor}
 \definecolor{dkgreen}{rgb}{0,0.35,0}
 \definecolor{dkviolet}{rgb}{0.3,0,0.5}
@@ -41,6 +46,7 @@
 \definecolor{dkblue}{rgb}{0, 0, 0.9}
 \definecolor{ltblue}{rgb}{0.38, 0.55, 0.8}
 \usepackage{lstcoq}
+
 \usepackage{catchfilebetweentags}
 \usepackage{verbatim}
 \usepackage{bussproofs}
@@ -84,12 +90,11 @@
          {Ů}{{\r{U}}}1    
 }
 
+
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 \usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
 
-\usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
-\selectlanguage{spanish}
+
 
 \usepackage{amsmath,amsfonts,amsthm} % Math packages
 \usepackage{tabularx}
@@ -207,8 +212,6 @@
 	\centerline{$M M \quad(?)$} \\ 
       \end{tabularx}
     \end{table}
-    Esta correspondencia puede parecer trivial, pero permite intercambiar las dos
-    formas de escribir esa misma idea.
     
     
   \section{El isomorfismo Curry-Howard}
@@ -350,7 +353,6 @@
       La lógica intuicionista es perfecta para ilustrar el isomorfismo, porque
       se corresponde con el cálculo lambda tipado.\\
       
-      \begin{table}[ht]
       \begin{tabular}{p{6cm}p{6cm}}
 	\begin{prooftree}
 	  \AxiomC{A}
@@ -394,9 +396,9 @@
 	  \BinaryInfC{B}
 	\end{prooftree} & 
 	\begin{prooftree}
-	  \AxiomC{A$\rightarrow$B::$\lambda M.N$}
+	  \AxiomC{$\lambda$A.B::M$\rightarrow$N}
 	  \AxiomC{A::M}
-	  \RightLabel{($\rightarrow$-$E$)}
+	  \RightLabel{($\lambda$-$E$)}
 	  \BinaryInfC{B::N}
 	\end{prooftree} \\
 	
@@ -415,11 +417,10 @@
 	  \UnaryInfC{$\vdots$}
 	  \UnaryInfC{B::N}
 	  \alwaysSingleLine
-	  \RightLabel{($\rightarrow$-$I^x$)}
-	  \UnaryInfC{A$\rightarrow$B :: $\lambda M.N$}
+	  \RightLabel{($\lambda$-$I^x$)}
+	  \UnaryInfC{$\lambda A.B$ :: $M \rightarrow N$}
 	\end{prooftree}
       \end{tabular}
-      \end{table}
   
       El isomorfismo va más allá de las reglas formales. La evaluación de
       programas en el cálculo lambda se corresponde directamente con la simplificación
@@ -447,7 +448,7 @@
 %       Los tipos se definen por enumeración de sus constructores, que pueden ser
 %       parametrizados o no.
       
-      %\lstinputlisting[language=Coq]{code.v}
+      %\lstinputlisting[language=Coq]{tipos.v}
   
   %\section{Lógica en Coq}
   %  \subsection{Lógica constructivista}
