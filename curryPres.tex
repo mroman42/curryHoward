@@ -1,0 +1,498 @@
+%%%%%
+% Curry-Howard
+% Author: Mario Román
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass{beamer}
+
+%----------------------------------------------------------------------------------------
+% 	Aditional Packages.
+%----------------------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+
+\usepackage{bussproofs}
+
+\usepackage{listings}
+\usepackage{listingsutf8}
+% \usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{dkgreen}{rgb}{0,0.35,0}
+\definecolor{dkviolet}{rgb}{0.3,0,0.5}
+\definecolor{dkred}{rgb}{0.5,0,0}
+\definecolor{dkblue}{rgb}{0, 0, 0.9}
+\definecolor{ltblue}{rgb}{0.38, 0.55, 0.8}
+\usepackage{lstcoq}
+\newenvironment{coq_example}{\begin{coq}}{\end{coq}}
+\lstset{
+     literate=%
+         {á}{{\'a}}1
+         {í}{{\'i}}1
+         {é}{{\'e}}1
+         {ý}{{\'y}}1
+         {ú}{{\'u}}1
+         {ó}{{\'o}}1
+         {ě}{{\v{e}}}1
+         {š}{{\v{s}}}1
+         {č}{{\v{c}}}1
+         {ř}{{\v{r}}}1
+         {ž}{{\v{z}}}1
+         {ď}{{\v{d}}}1
+         {ť}{{\v{t}}}1
+         {ň}{{\v{n}}}1                
+         {ů}{{\r{u}}}1
+         {Á}{{\'A}}1
+         {Í}{{\'I}}1
+         {É}{{\'E}}1
+         {Ý}{{\'Y}}1
+         {Ú}{{\'U}}1
+         {Ó}{{\'O}}1
+         {Ě}{{\v{E}}}1
+         {Š}{{\v{S}}}1
+         {Č}{{\v{C}}}1
+         {Ř}{{\v{R}}}1
+         {Ž}{{\v{Z}}}1
+         {Ď}{{\v{D}}}1
+         {Ť}{{\v{T}}}1
+         {Ň}{{\v{N}}}1                
+         {Ů}{{\r{U}}}1    
+}
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+
+
+\mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Isomorfismo Curry-Howard]{El Isomorfismo de Curry-Howard} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Mario Román} % Your name
+\institute[UGR] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+\textit{mromang08+github@gmail.com} \\ \medskip 
+Universidad de Granada \\ % Your institution for the title page
+\medskip % Your email address
+\includegraphics[scale=0.5]{by-sa.png}
+}
+
+\date{\today} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+
+\section{El isomorfismo en la deducción natural.}
+
+  \subsection{La deducción natural}
+  
+    \begin{frame}
+    \frametitle{La lógica intuicionista}
+      La lógica intuicionista se diferencia de la lógica clásica en que usa una \textbf{noción
+      constructivista de verdad}. En particular, el enunciado $A \vee B$ sólo puede ser
+      demostrado si se construye alguna prueba de $A$ o de $B$. En consecuencia, la
+      ley del tercio excluso $A \vee \neg A$, no puede demostrarse. \\~\\
+      
+      Aun así, puede introducirse como axioma posteriormente:
+      \begin{block}{Axioma del tercio excluso}
+	Puede hallarse siempre evidencia de $A$ o de $\neg A$. En particular, para cualquier
+	proposición $A$ puede hallarse evidencia de:
+	\begin{equation*}
+	 A \vee \neg A
+	\end{equation*}
+	\smallskip
+      \end{block}
+      
+    \end{frame}
+
+  %------------------------------------------------
+
+    \begin{frame}
+      \frametitle{La deducción natural}
+      En 1935, Gerhard Genzen publicó dos nuevas formulaciones de la lógica intuicionista, siendo
+      una de ellas la \textbf{deducción natural}. Junto a ellas estableció un método
+      de simplificación de demostraciones, que servía para asegurarse que la demostración
+      no daba vueltas innecesarias. \\~\\
+      
+      Para asegurarse de esto, estableció que en la demostración normalizada de una
+      fórmula sólo podían aparecer sus subfórmulas. Por ejemplo, para demostrar $A \wedge B$,
+      sólo podían usarse $A$, $B$ y sus subexpresiones, nunca algo como $A \vee B$.
+      Este método asegura además la consistencia. No existe forma de demostrar $\bot$,
+      la proposición contradicción (False).
+    \end{frame}
+
+  %------------------------------------------------
+
+    \begin{frame}
+      \frametitle{Reglas de la deducción natural}
+      La deducción natural posee las siguientes reglas:
+      
+      \texttt{
+      \begin{tabular}{p{5cm}|p{5cm}}
+	\begin{prooftree}
+	  \AxiomC{A}
+	  \AxiomC{B}
+	  \RightLabel{($\&-I$)}
+	  \BinaryInfC{A \& B}
+	\end{prooftree} \\
+	\hline
+	\begin{prooftree}
+	  \AxiomC{A \& B}
+	  \RightLabel{($\&$-$E_1$)}
+	  \UnaryInfC{A}
+	\end{prooftree} &
+	\begin{prooftree}
+	  \AxiomC{A \& B}
+	  \RightLabel{($\&$-$E_2$)}
+	  \UnaryInfC{B}
+	\end{prooftree} \\
+	\hline
+	\begin{prooftree}
+	  \AxiomC{A $\rightarrow$ B}
+	  \AxiomC{A}
+	  \RightLabel{($\rightarrow$-$E$)}
+	  \BinaryInfC{B}
+	\end{prooftree} &
+	\begin{prooftree}
+	  \alwaysNoLine
+	  \AxiomC{$[$A$]^x$}
+	  \UnaryInfC{$\vdots$}
+	  \UnaryInfC{B}
+	  \alwaysSingleLine
+	  \RightLabel{($\rightarrow$-$I^x$)}
+	  \UnaryInfC{A$\rightarrow$B}
+	\end{prooftree}  
+      \end{tabular}
+      }
+    \end{frame}    
+        
+    
+  %------------------------------------------------
+
+  \subsection{El cálculo lambda tipado}
+    \begin{frame}
+      \frametitle{El cálculo lambda tipado}
+      En 1940, Alonzo Church publicó una nueva formulación del cálculo lambda, siendo esta
+      el cálculo lambda tipado. Junto a ella podía usarse la simplificación de programas
+      con estrategias de reducción. \\~\\
+      
+      Para asegurarse de que el cálculo lambda no hacía aparecer ciertas paradojas,
+      introdujo los tipos y limitó los constructores de tipos a uno solo: el operador
+      $\rightarrow$, que construye el tipo función entre dos tipos. Por esto, puede denotarse
+      por cálculo $\lambda^{\rightarrow}$.
+    \end{frame}
+
+  %------------------------------------------------
+
+  
+    \begin{frame}
+      \frametitle{Reglas del cálculo lambda tipado}
+      El cálculo lambda tipado posee las siguientes reglas:
+      
+      \ttfamily
+      \begin{tabular}{p{5cm}|p{5cm}}
+	\begin{prooftree}
+	  \AxiomC{A::M}
+	  \AxiomC{B::N}
+	  \RightLabel{($\times-I$)}
+	  \BinaryInfC{A$\times$B::(M,N)}
+	\end{prooftree} \\
+	\hline
+	
+	\begin{prooftree}
+	  \AxiomC{A$\times$B::(M,N)}
+	  \RightLabel{($\pi_1$)}
+	  \UnaryInfC{A::M}
+	\end{prooftree} &
+	
+	\begin{prooftree}
+	  \AxiomC{A$\times$B::(M,N)}
+	  \RightLabel{($\pi_2$)}
+	  \UnaryInfC{B::N}
+	\end{prooftree} \\
+	\hline
+	
+	\begin{prooftree}
+	  \AxiomC{$\lambda$A.B::M$\rightarrow$N}
+	  \AxiomC{A::M}
+	  \RightLabel{($\lambda$-$E$)}
+	  \BinaryInfC{B::N}
+	\end{prooftree} &
+	
+	\begin{prooftree}
+	  \alwaysNoLine
+	  \AxiomC{$[$A::M$]^x$}
+	  \UnaryInfC{$\vdots$}
+	  \UnaryInfC{B::N}
+	  \alwaysSingleLine
+	  \RightLabel{($\lambda$-$I^x$)}
+	  \UnaryInfC{$\lambda A.B$ :: $M \rightarrow N$}
+	\end{prooftree}
+      \end{tabular}
+    \end{frame}
+    
+  %------------------------------------------------
+
+  \subsection{Conclusión}
+    \begin{frame}
+      \frametitle{Las proposiciones son tipos}
+      De todo esto sacamos una conclusión: \textbf{las proposiciones lógicas son tipos}. 
+      A cada proposición lógica le corresponde un tipo, unívocamente. 
+      Y una proposición será verdadera si y sólo si su tipo correspondiente está
+      habitado. Es decir, existe alguna instancia de ese tipo. \\~\\
+      
+      \begin{itemize}
+       \item Los tipos conocidos y habitados son los \textbf{axiomas} (\texttt{int}, \texttt{char}, \texttt{string}).
+       \item Una función de tipos hace que uno implique otro (\texttt{f :: a -> b}, si \texttt{a} está poblado por \texttt{x}, \texttt{f(x)} puebla b).
+	Es la \textbf{implicación} lógica.
+       \item El producto está poblado ssi ambos lo están (hay un objeto \texttt{(a,b)} por cada pareja \texttt{a} y \texttt{b}).
+	Es la \textbf{conjunción} lógica.
+      \end{itemize}
+      
+    \end{frame}
+    
+  %------------------------------------------------
+  
+%     \begin{frame}
+%     \frametitle{Bullet Points}
+%     \begin{itemize}
+%     \item Lorem ipsum dolor sit amet, consectetur adipiscing elit
+%     \item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
+%     \item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
+%     \item Nam cursus est eget velit posuere pellentesque
+%     \item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
+%     \end{itemize}
+%     \end{frame}
+
+  %------------------------------------------------
+
+\section{El isomorfismo en Haskell}
+\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
+  \frametitle{El isomorfismo en Haskell}
+  El sistema de tipos de Haskell permite denotar por \texttt{a} un
+  tipo arbitrario. Denota con \texttt{->} el tipo de las funciones entre
+  dos elementos. Sólo algunos tipos están habitados.
+  \begin{block}{Tipos permitidos}
+  \begin{lstlisting}[language=Haskell]
+  a -> a                -- identity x = x
+  a -> (b -> a)         -- const a = (\b->a)
+  (a,b) -> a            -- proy (a,b) = a
+  (a, (a -> b)) -> b    -- apply f x = f(x) \end{lstlisting}
+  \end{block}
+  \begin{block}{Tipos no permitidos}
+    \begin{lstlisting}
+  a -> (a -> b)
+  a -> b
+  b -> (b,c)
+    \end{lstlisting}
+  \end{block}
+\end{frame}
+
+   %------------------------------------------------
+  
+\section{El isomorfismo en Coq}
+\begin{frame}[fragile]
+  \frametitle{El isomorfismo en Coq}
+    El asistente de demostraciones Coq consiste en un lenguaje de
+    programación y un intérprete del lenguaje destinados a demostrar
+    proposiciones lógicas. Para esto, usa el isomorfismo en sentido inverso,
+    un objeto de un tipo determinado es una demostración de una proposición
+    determinada. \\~\\
+    
+    \begin{block}{Demostración en Coq}
+     \begin{lstlisting}[language=Coq]
+(* Theorem / Type declaration*)
+Theorem eight_is_beautiful : beautiful 8.
+(* Proof / Construction *)
+Proof.
+  apply b_sum with (n:=3) (m:=5).
+  apply b_3.
+  apply b_5.
+Qed.
+     \end{lstlisting}
+
+    \end{block}
+
+ 
+\end{frame}
+
+% 
+%   %------------------------------------------------
+% 
+%   \begin{frame}
+%   \frametitle{Multiple Columns}
+%   \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+% 
+%   \column{.45\textwidth} % Left column and width
+%   \textbf{Heading}
+%   \begin{enumerate}
+%   \item Statement
+%   \item Explanation
+%   \item Example
+%   \end{enumerate}
+% 
+%   \column{.5\textwidth} % Right column and width
+%   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+% 
+%   \end{columns}
+%   \end{frame}
+% 
+% \begin{frame}
+% \frametitle{Table}
+% \begin{table}
+% \begin{tabular}{l l l}
+% \toprule
+% \textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
+% \midrule
+% Treatment 1 & 0.0003262 & 0.562 \\
+% Treatment 2 & 0.0015681 & 0.910 \\
+% Treatment 3 & 0.0009271 & 0.296 \\
+% \bottomrule
+% \end{tabular}
+% \caption{Table caption}
+% \end{table}
+% \end{frame}
+% 
+% %------------------------------------------------
+% 
+% \begin{frame}
+% \frametitle{Theorem}
+% \begin{theorem}[Mass--energy equivalence]
+% $E = mc^2$
+% \end{theorem}
+% \end{frame}
+% 
+% %------------------------------------------------
+% 
+
+% 
+% %------------------------------------------------
+% 
+% \begin{frame}
+% \frametitle{Figure}
+% Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
+% %\begin{figure}
+% %\includegraphics[width=0.8\linewidth]{test}
+% %\end{figure}
+% \end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{References}
+\footnotesize{
+\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
+
+\bibitem[softwareFund]{p2} Benjamin Pierce et al. (2014)
+  \newblock Software Foundations.
+  \newblock \emph{University of Pennsylvania}
+
+\bibitem[walder]{p3} Philip Walder
+  \newblock Propositions as Types
+  \newblock \emph{University of Edimburg}
+
+\bibitem[lectures]{p4} Morten Heine B. Sørensen, Paweł Urzyczyn,
+  \newblock Lectures on the Curry-Howard isomorphism
+  \newblock \emph{Universities of Warsaw and Copenhagen}
+
+\end{thebibliography}
+}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\end{document} 
